@@ -1,0 +1,571 @@
+Sub state_sensitivity_scatter()
+
+
+For i = 2 To 27
+    
+state = Worksheets("Data_Capture_Info").Cells(i, 1)
+
+ActiveWorkbook.Sheets.Add After:=Worksheets(Worksheets.Count)
+ActiveSheet.Name = "All_Data"
+
+
+'move All_Data to new sheet
+
+Sheets("2007 Reference Data").Range("A1:EF94").Copy Destination:=Sheets("All_Data").Cells(1, 1)
+Sheets("2069 MCWC Data").Range("B1:EF94").Copy Destination:=Sheets("All_Data").Cells(1, 137)
+Sheets("2007-2013 Hist Avg").Range("B1:EF94").Copy Destination:=Sheets("All_Data").Cells(1, 272)
+Sheets("2007-2013 Hist Data").Range("B1:EF646").Copy Destination:=Sheets("All_Data").Cells(1, 407)
+
+
+    Dim currentColumn As Integer
+    Dim columnHeading As String
+
+
+
+    For currentColumn = ActiveSheet.UsedRange.Columns.Count To 1 Step -1
+
+        columnHeading = ActiveSheet.UsedRange.Cells(1, currentColumn).Value
+
+        
+        Select Case columnHeading
+            Case state, "Short Tons"
+                'Do nothing
+            Case Else
+                'Delete data from other states
+                If InStr(1, _
+                   ActiveSheet.UsedRange.Cells(1, currentColumn).Value, _
+                   "nocolumnscontainthis", vbBinaryCompare) = 0 Then
+
+                    ActiveSheet.Columns(currentColumn).Delete
+
+                End If
+        End Select
+    Next
+
+'Label data on state specific tabs
+Range("A1").EntireRow.Insert
+Range("B1").Value = "2007 Reference Data"
+Range("G1").Value = "2069 MCWC Data"
+Range("L1").Value = "2007-2013 Historical Average"
+Range("Q1").Value = "2007-2013 Historical Data"
+
+'create empty plots
+
+Dim NOx As Object
+Dim CO2 As Object
+Dim SO2 As Object
+
+Set NOx = ActiveSheet.Shapes.AddChart2(240, xlXYScatter, 20200, 1)
+Set CO2 = ActiveSheet.Shapes.AddChart2(240, xlXYScatter, 20200, 1)
+Set SO2 = ActiveSheet.Shapes.AddChart2(240, xlXYScatter, 20200, 1)
+
+
+    NOx.Select
+
+
+ 
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(1).Name = "=""SIM_REF"""
+    ActiveChart.FullSeriesCollection(1).XValues = "=All_Data!$F$4:$F$95"
+    ActiveChart.FullSeriesCollection(1).Values = "=All_Data!$C$4:$C$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(2).Name = "=""MCWC"""
+    ActiveChart.FullSeriesCollection(2).XValues = "=All_Data!$K$4:$K$95"
+    ActiveChart.FullSeriesCollection(2).Values = "=All_Data!$H$4:$H$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(3).Name = "=""'07-'13 Hist Averaged"""
+    ActiveChart.FullSeriesCollection(3).XValues = "=All_Data!$P$4:$P$95"
+    ActiveChart.FullSeriesCollection(3).Values = "=All_Data!$M$4:$M$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(4).Name = "=""'07"""
+    ActiveChart.FullSeriesCollection(4).XValues = "=All_Data!$U$4:$U$95"
+    ActiveChart.FullSeriesCollection(4).Values = "=All_Data!$R$4:$R$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(5).Name = "=""'08"""
+    ActiveChart.FullSeriesCollection(5).XValues = "=All_Data!$U$96:$U$187"
+    ActiveChart.FullSeriesCollection(5).Values = "=All_Data!$R$96:$R$187"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(6).Name = "=""'09"""
+    ActiveChart.FullSeriesCollection(6).XValues = "=All_Data!$U$188:$U$279"
+    ActiveChart.FullSeriesCollection(6).Values = "=All_Data!$R$188:$R$279"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(7).Name = "=""'10"""
+    ActiveChart.FullSeriesCollection(7).XValues = "=All_Data!$U$280:$U$371"
+    ActiveChart.FullSeriesCollection(7).Values = "=All_Data!$R$280:$R$371"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(8).Name = "=""'11"""
+    ActiveChart.FullSeriesCollection(8).XValues = "=All_Data!$U$372:$U$463"
+    ActiveChart.FullSeriesCollection(8).Values = "=All_Data!$R$372:$R$463"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(9).Name = "=""'12"""
+    ActiveChart.FullSeriesCollection(9).XValues = "=All_Data!$U$464:$U$555"
+    ActiveChart.FullSeriesCollection(9).Values = "=All_Data!$R$464:$R$555"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(10).Name = "=""'13"""
+    ActiveChart.FullSeriesCollection(10).XValues = "=All_Data!$U$556:$U$647"
+    ActiveChart.FullSeriesCollection(10).Values = "=All_Data!$R$556:$R$647"
+  
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    
+    
+    
+  
+               
+  
+    ActiveChart.ApplyLayout (1)
+With ActiveChart
+     'chart name
+    .HasTitle = True
+    .ChartTitle.Characters.Text = state & " Temperature vs. NOx Emissions"
+     'X axis name
+    .Axes(xlCategory, xlPrimary).HasTitle = True
+    .Axes(xlCategory, xlPrimary).AxisTitle.Characters.Text = "Daily Average Temperature (K)"
+     'y-axis name
+    .Axes(xlValue, xlPrimary).HasTitle = True
+    .Axes(xlValue, xlPrimary).AxisTitle.Characters.Text = "NOx (Short Tons)"
+    .Axes(xlValue).MinimumScale = 0
+End With
+    ActiveChart.FullSeriesCollection(1).Select
+    ActiveChart.FullSeriesCollection(1).Trendlines.Add
+    ActiveChart.FullSeriesCollection(1).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(2).Select
+    ActiveChart.FullSeriesCollection(2).Trendlines.Add
+    ActiveChart.FullSeriesCollection(2).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+   
+    ActiveChart.FullSeriesCollection(3).Select
+    ActiveChart.FullSeriesCollection(3).Trendlines.Add
+    ActiveChart.FullSeriesCollection(3).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+  
+    ActiveChart.FullSeriesCollection(4).Select
+    ActiveChart.FullSeriesCollection(4).Trendlines.Add
+    ActiveChart.FullSeriesCollection(4).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(5).Select
+    ActiveChart.FullSeriesCollection(5).Trendlines.Add
+    ActiveChart.FullSeriesCollection(5).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(6).Select
+    ActiveChart.FullSeriesCollection(6).Trendlines.Add
+    ActiveChart.FullSeriesCollection(6).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(7).Select
+    ActiveChart.FullSeriesCollection(7).Trendlines.Add
+    ActiveChart.FullSeriesCollection(7).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(8).Select
+    ActiveChart.FullSeriesCollection(8).Trendlines.Add
+    ActiveChart.FullSeriesCollection(8).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(9).Select
+    ActiveChart.FullSeriesCollection(9).Trendlines.Add
+    ActiveChart.FullSeriesCollection(9).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(10).Select
+    ActiveChart.FullSeriesCollection(10).Trendlines.Add
+    ActiveChart.FullSeriesCollection(10).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+  
+    ActiveChart.Axes(xlCategory).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+    ActiveChart.Axes(xlValue).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+   
+    With ActiveSheet
+    .ChartObjects(1).Top = .Range("W2").Top
+    .ChartObjects(1).Left = .Range("W2").Left
+    .ChartObjects(1).Width = 750 'resize
+    .ChartObjects(1).Height = 490 'resize
+    End With
+    
+
+' END NOX CHART
+
+
+'START CO2 CHART
+    
+    CO2.Select
+    
+ 
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(1).Name = "=""SIM_REF"""
+    ActiveChart.FullSeriesCollection(1).XValues = "=All_Data!$F$4:$F$95"
+    ActiveChart.FullSeriesCollection(1).Values = "=All_Data!$D$4:$D$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(2).Name = "=""MCWC"""
+    ActiveChart.FullSeriesCollection(2).XValues = "=All_Data!$K$4:$K$95"
+    ActiveChart.FullSeriesCollection(2).Values = "=All_Data!$I$4:$I$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(3).Name = "=""'07-'13 Historical"""
+    ActiveChart.FullSeriesCollection(3).XValues = "=All_Data!$P$4:$P$95"
+    ActiveChart.FullSeriesCollection(3).Values = "=All_Data!$N$4:$N$95"
+  
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(4).Name = "=""'07"""
+    ActiveChart.FullSeriesCollection(4).XValues = "=All_Data!$U$4:$U$95"
+    ActiveChart.FullSeriesCollection(4).Values = "=All_Data!$S$4:$S$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(5).Name = "=""'08"""
+    ActiveChart.FullSeriesCollection(5).XValues = "=All_Data!$U$96:$U$187"
+    ActiveChart.FullSeriesCollection(5).Values = "=All_Data!$S$96:$S$187"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(6).Name = "=""'09"""
+    ActiveChart.FullSeriesCollection(6).XValues = "=All_Data!$U$188:$U$279"
+    ActiveChart.FullSeriesCollection(6).Values = "=All_Data!$S$188:$S$279"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(7).Name = "=""'10"""
+    ActiveChart.FullSeriesCollection(7).XValues = "=All_Data!$U$280:$U$371"
+    ActiveChart.FullSeriesCollection(7).Values = "=All_Data!$S$280:$S$371"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(8).Name = "=""'11"""
+    ActiveChart.FullSeriesCollection(8).XValues = "=All_Data!$U$372:$U$463"
+    ActiveChart.FullSeriesCollection(8).Values = "=All_Data!$S$372:$S$463"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(9).Name = "=""'12"""
+    ActiveChart.FullSeriesCollection(9).XValues = "=All_Data!$U$464:$U$555"
+    ActiveChart.FullSeriesCollection(9).Values = "=All_Data!$S$464:$S$555"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(10).Name = "=""'13"""
+    ActiveChart.FullSeriesCollection(10).XValues = "=All_Data!$U$556:$U$647"
+    ActiveChart.FullSeriesCollection(10).Values = "=All_Data!$S$556:$S$647"
+    
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    
+    
+    
+    ActiveChart.ApplyLayout (1)
+With ActiveChart
+     'chart name
+    .HasTitle = True
+    .ChartTitle.Characters.Text = state & " Temperature vs. CO2 Emissions"
+     'X axis name
+    .Axes(xlCategory, xlPrimary).HasTitle = True
+    .Axes(xlCategory, xlPrimary).AxisTitle.Characters.Text = "Daily Average Temperature (K)"
+     'y-axis name
+    .Axes(xlValue, xlPrimary).HasTitle = True
+    .Axes(xlValue, xlPrimary).AxisTitle.Characters.Text = "CO2 (Short Tons)"
+    .Axes(xlValue).MinimumScale = 0
+End With
+    ActiveChart.FullSeriesCollection(1).Select
+    ActiveChart.FullSeriesCollection(1).Trendlines.Add
+    ActiveChart.FullSeriesCollection(1).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(2).Select
+    ActiveChart.FullSeriesCollection(2).Trendlines.Add
+    ActiveChart.FullSeriesCollection(2).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+   
+    ActiveChart.FullSeriesCollection(3).Select
+    ActiveChart.FullSeriesCollection(3).Trendlines.Add
+    ActiveChart.FullSeriesCollection(3).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+
+    ActiveChart.FullSeriesCollection(4).Select
+    ActiveChart.FullSeriesCollection(4).Trendlines.Add
+    ActiveChart.FullSeriesCollection(4).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(5).Select
+    ActiveChart.FullSeriesCollection(5).Trendlines.Add
+    ActiveChart.FullSeriesCollection(5).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(6).Select
+    ActiveChart.FullSeriesCollection(6).Trendlines.Add
+    ActiveChart.FullSeriesCollection(6).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(7).Select
+    ActiveChart.FullSeriesCollection(7).Trendlines.Add
+    ActiveChart.FullSeriesCollection(7).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(8).Select
+    ActiveChart.FullSeriesCollection(8).Trendlines.Add
+    ActiveChart.FullSeriesCollection(8).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(9).Select
+    ActiveChart.FullSeriesCollection(9).Trendlines.Add
+    ActiveChart.FullSeriesCollection(9).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(10).Select
+    ActiveChart.FullSeriesCollection(10).Trendlines.Add
+    ActiveChart.FullSeriesCollection(10).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.Axes(xlCategory).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+    ActiveChart.Axes(xlValue).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+   
+    With ActiveSheet
+    .ChartObjects(2).Top = .Range("W37").Top
+    .ChartObjects(2).Left = .Range("W37").Left
+    .ChartObjects(2).Width = 750 'resize
+    .ChartObjects(2).Height = 490 'resize
+    End With
+   
+    
+'END CO2 CHART
+
+
+'START SO2 CHART
+
+SO2.Select
+    
+ 
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(1).Name = "=""SIM_REF"""
+    ActiveChart.FullSeriesCollection(1).XValues = "=All_Data!$F$4:$F$95"
+    ActiveChart.FullSeriesCollection(1).Values = "=All_Data!$B$4:$B$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(2).Name = "=""MCWC"""
+    ActiveChart.FullSeriesCollection(2).XValues = "=All_Data!$K$4:$K$95"
+    ActiveChart.FullSeriesCollection(2).Values = "=All_Data!$G$4:$G$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(3).Name = "=""'07-'13 Historical"""
+    ActiveChart.FullSeriesCollection(3).XValues = "=All_Data!$P$4:$P$95"
+    ActiveChart.FullSeriesCollection(3).Values = "=All_Data!$L$4:$L$95"
+  
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(4).Name = "=""'07"""
+    ActiveChart.FullSeriesCollection(4).XValues = "=All_Data!$U$4:$U$95"
+    ActiveChart.FullSeriesCollection(4).Values = "=All_Data!$Q$4:$Q$95"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(5).Name = "=""'08"""
+    ActiveChart.FullSeriesCollection(5).XValues = "=All_Data!$U$96:$U$187"
+    ActiveChart.FullSeriesCollection(5).Values = "=All_Data!$Q$96:$Q$187"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(6).Name = "=""'09"""
+    ActiveChart.FullSeriesCollection(6).XValues = "=All_Data!$U$188:$U$279"
+    ActiveChart.FullSeriesCollection(6).Values = "=All_Data!$Q$188:$Q$279"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(7).Name = "=""'10"""
+    ActiveChart.FullSeriesCollection(7).XValues = "=All_Data!$U$280:$U$371"
+    ActiveChart.FullSeriesCollection(7).Values = "=All_Data!$Q$280:$Q$371"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(8).Name = "=""'11"""
+    ActiveChart.FullSeriesCollection(8).XValues = "=All_Data!$U$372:$U$463"
+    ActiveChart.FullSeriesCollection(8).Values = "=All_Data!$Q$372:$Q$463"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(9).Name = "=""'12"""
+    ActiveChart.FullSeriesCollection(9).XValues = "=All_Data!$U$464:$U$555"
+    ActiveChart.FullSeriesCollection(9).Values = "=All_Data!$Q$464:$Q$555"
+    
+    ActiveChart.SeriesCollection.NewSeries
+    ActiveChart.FullSeriesCollection(10).Name = "=""'13"""
+    ActiveChart.FullSeriesCollection(10).XValues = "=All_Data!$U$556:$U$647"
+    ActiveChart.FullSeriesCollection(10).Values = "=All_Data!$Q$556:$Q$647"
+    
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    ActiveChart.SeriesCollection(11).Delete
+    
+    
+    
+    ActiveChart.ApplyLayout (1)
+With ActiveChart
+     'chart name
+    .HasTitle = True
+    .ChartTitle.Characters.Text = state & " Temperature vs. SO2 Emissions"
+     'X axis name
+    .Axes(xlCategory, xlPrimary).HasTitle = True
+    .Axes(xlCategory, xlPrimary).AxisTitle.Characters.Text = "Daily Average Temperature (K)"
+     'y-axis name
+    .Axes(xlValue, xlPrimary).HasTitle = True
+    .Axes(xlValue, xlPrimary).AxisTitle.Characters.Text = "SO2 (Short Tons)"
+    .Axes(xlValue).MinimumScale = 0
+End With
+    ActiveChart.FullSeriesCollection(1).Select
+    ActiveChart.FullSeriesCollection(1).Trendlines.Add
+    ActiveChart.FullSeriesCollection(1).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(2).Select
+    ActiveChart.FullSeriesCollection(2).Trendlines.Add
+    ActiveChart.FullSeriesCollection(2).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(3).Select
+    ActiveChart.FullSeriesCollection(3).Trendlines.Add
+    ActiveChart.FullSeriesCollection(3).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+  
+    ActiveChart.FullSeriesCollection(4).Select
+    ActiveChart.FullSeriesCollection(4).Trendlines.Add
+    ActiveChart.FullSeriesCollection(4).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(5).Select
+    ActiveChart.FullSeriesCollection(5).Trendlines.Add
+    ActiveChart.FullSeriesCollection(5).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(6).Select
+    ActiveChart.FullSeriesCollection(6).Trendlines.Add
+    ActiveChart.FullSeriesCollection(6).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(7).Select
+    ActiveChart.FullSeriesCollection(7).Trendlines.Add
+    ActiveChart.FullSeriesCollection(7).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(8).Select
+    ActiveChart.FullSeriesCollection(8).Trendlines.Add
+    ActiveChart.FullSeriesCollection(8).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(9).Select
+    ActiveChart.FullSeriesCollection(9).Trendlines.Add
+    ActiveChart.FullSeriesCollection(9).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+    
+    ActiveChart.FullSeriesCollection(10).Select
+    ActiveChart.FullSeriesCollection(10).Trendlines.Add
+    ActiveChart.FullSeriesCollection(10).Trendlines(1).Select
+    Selection.DisplayEquation = False
+    Selection.DisplayRSquared = False
+   
+  
+    ActiveChart.Axes(xlCategory).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+    ActiveChart.Axes(xlValue).AxisTitle.Select
+    Selection.Format.TextFrame2.TextRange.Font.Size = 14
+   
+    With ActiveSheet
+    .ChartObjects(3).Top = .Range("W72").Top
+    .ChartObjects(3).Left = .Range("W72").Left
+    .ChartObjects(3).Width = 750 'resize
+    .ChartObjects(3).Height = 490 'resize
+    End With
+    
+    
+'END SO2 CHART
+
+ActiveSheet.Name = state
+
+Next i
+
+
+End Sub
